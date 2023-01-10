@@ -54,7 +54,7 @@ public class VerticalScrolling {
         int startPoint = (int) (dimension.getHeight() * 0.9);
         int endPoint = (int) (dimension.getWidth() * 0.5);
         TouchAction action = new TouchAction(driver);
-        new TouchAction(driver).press(point(width, startPoint)).waitAction(waitOptions(ofSeconds(3))).moveTo(point(width, endPoint)).release().perform();
+        action.press(point(width, startPoint)).waitAction(waitOptions(ofSeconds(3))).moveTo(point(width, endPoint)).release().perform();
     }
 
     void scrollToElement(int count, WebElement ele) {

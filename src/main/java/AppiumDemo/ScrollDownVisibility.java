@@ -1,8 +1,8 @@
 package AppiumDemo;
 
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
@@ -16,17 +16,16 @@ import static io.appium.java_client.touch.WaitOptions.waitOptions;
 import static io.appium.java_client.touch.offset.PointOption.point;
 import static java.time.Duration.ofSeconds;
 
-public class LaunchApp {
-
-    AppiumDriver<WebElement> driver;
+public class ScrollDownVisibility {
+    AndroidDriver<WebElement> driver;
 
     @Test
-    public void launchAppFromAppium() throws MalformedURLException, InterruptedException {
+    public void launchApp() throws MalformedURLException, InterruptedException {
 
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("platformName", "Android");
-        caps.setCapability("deviceName", "emulator-5554");
-        caps.setCapability("automationName","UiAutomator2");
+        caps.setCapability("deviceName", "Android name");
+        caps.setCapability("automationName", "UiAutomator2");
         caps.setCapability("platform version", "11");
         caps.setCapability("appPackage", "com.cricbuzz.android");
         caps.setCapability("appActivity", "com.cricbuzz.android.lithium.app.view.activity.NyitoActivity");
@@ -35,32 +34,31 @@ public class LaunchApp {
         Thread.sleep(3000);
         driver.findElement(By.id("com.cricbuzz.android:id/tab_more")).click();
         Thread.sleep(3000);
-        scrollToElement(15, driver.findElement(By.id("com.cricbuzz.android:id/tab_more")));
+        scrollDownToElement(10, driver.findElement(By.id("com.cricbuzz.android:id/tab_more")));
     }
 
     @Test
-    void scroll() {
+    void scrollDown(){
         Dimension dimension = driver.manage().window().getSize();
-        int height = dimension.getHeight();
         int width = dimension.getWidth();
-        int x = width / 2;
-        int start_y = (int) (height * 0.6);
-        int end_y = (int) (height * 0.3);
-        TouchAction action = new TouchAction(driver);
-        action.press(point(x, start_y)).waitAction(waitOptions(ofSeconds(3))).moveTo(point(x, end_y)).release().perform();
+        int height = dimension.getHeight();
+        int x = (width/2);
+        int startPoint = (int)(height*0.9);
+        int endPoint = (int)(width*0.5);
+        TouchAction action = new TouchAction<>(driver);
+        action.press(point(x, startPoint)).waitAction(waitOptions(ofSeconds(3))).moveTo(point(x, endPoint)).release().perform();
     }
 
-
-    void scrollToElement(int count, WebElement element) {
+    void scrollDownToElement(int count, WebElement element) {
         try {
-            for (int i = 0; i < count; i++) {
-                if (element.isDisplayed()) {
+            for (int i=0; i<count;i++){
+                if (element.isDisplayed()){
                     break;
                 } else {
-                    scroll();
+                    scrollDown();
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

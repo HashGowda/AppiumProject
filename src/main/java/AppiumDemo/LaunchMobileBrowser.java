@@ -19,7 +19,10 @@ public class LaunchMobileBrowser {
         caps.setCapability("deviceName", "fd9d07b4");
         caps.setCapability("automationName","UiAutomator2");
         caps.setCapability("platform version", "11");
+        caps.setCapability("appPackage","com.android.chrome");
+        caps.setCapability("appActivity","com.google.android.apps.chrome.TranslateDispatcher");
         caps.setCapability("browserName","Chrome");
+
 
         AppiumDriver<WebElement> driver = new AndroidDriver<WebElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
         driver.get("https://opensource-demo.orangehrmlive.com/");
