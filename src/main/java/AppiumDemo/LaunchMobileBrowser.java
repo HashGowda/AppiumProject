@@ -24,7 +24,7 @@ public class LaunchMobileBrowser {
         caps.setCapability("browserName","Chrome");
 
 
-        AppiumDriver<WebElement> driver = new AndroidDriver<WebElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
+        AppiumDriver<WebElement> driver = new AndroidDriver<WebElement>(new URL("http://0.0.0.0:4723/wd/hub"), caps);
         driver.get("https://opensource-demo.orangehrmlive.com/");
         Thread.sleep(3000);
         driver.quit();
