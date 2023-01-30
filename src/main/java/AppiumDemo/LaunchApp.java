@@ -71,15 +71,12 @@ public class LaunchApp {
     public void explicitWait(){
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.cricbuzz.android:id/txt_match_num")));
-
-
     }
 
     @Test(priority = 1)
     void currentMatch()  {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("com.cricbuzz.android:id/txt_match_num")));
         driver.findElement(By.id("com.cricbuzz.android:id/txt_match_num")).click();
-
     }
 
     @Test(priority = 3)
