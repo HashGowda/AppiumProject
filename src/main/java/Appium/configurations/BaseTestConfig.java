@@ -7,19 +7,20 @@ import Appium.utils.ContextManager;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.Status;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.remote.AndroidMobileCapabilityType;
+import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.DesiredCapabilities;
+
+
 import org.testng.ITestResult;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.URL;
+import java.time.Duration;
 
 import static com.google.common.collect.ObjectArrays.concat;
 
@@ -31,7 +32,7 @@ public class BaseTestConfig extends RetryAnalyzer {
     public AppiumDriver driver;
     private static ExtentReports extent;
     private static final String[] OS_MAC_RUNTIME = {"/bin/bash", "-l", "-c"};
-    private static final String[] WIN_RUNTIME = { "cmd.exe", "/C" };
+    private static final String[] WIN_RUNTIME = {"cmd.exe", "/C"};
     public static String filePath;
 
     /**
@@ -50,14 +51,14 @@ public class BaseTestConfig extends RetryAnalyzer {
      * Start Appium Server
      */
     public void startAppiumServer() {
-            try {
-                service = AppiumDriverLocalService.buildDefaultService();
-                writeAppiumServerLogsIntoFile();
-                service.start();
+        try {
+            service = AppiumDriverLocalService.buildDefaultService();
+            writeAppiumServerLogsIntoFile();
+            service.start();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void writeAppiumServerLogsIntoFile() {
@@ -69,17 +70,18 @@ public class BaseTestConfig extends RetryAnalyzer {
      * Stop Appium Server
      */
     public void stopAppiumServer() {
-            service.stop();
+        service.stop();
     }
 
     /**
-     *Code to Launch/Install Application from APK file
+     * Code to Launch/Install Application from APK file
      */
 
     public void launchApplication() {
         try {
             System.out.println("EndPoint used is " + prop.getProperty("endpoint"));
-            DesiredCapabilities capabilities = new DesiredCapabilities();
+
+            /*DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability("newCommandTimeout", prop.getProperty("newCommandTimeout"));
             capabilities.setCapability("platformName", prop.getProperty("platformName"));
             capabilities.setCapability("platformVersion", prop.getProperty("platformVersion"));
@@ -96,7 +98,28 @@ public class BaseTestConfig extends RetryAnalyzer {
             capabilities.setCapability("noReset",true);
             capabilities.setCapability("skipServerInstallation",true);
             capabilities.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true);
-            driver = new AndroidDriver<MobileElement>(new URL(prop.getProperty("endpoint")), capabilities);
+            driver = new AndroidDriver(new URL(prop.getProperty("endpoint")), capabilities); */
+
+            UiAutomator2Options options = new UiAutomator2Options();
+            options.setNewCommandTimeout(Duration.parse(prop.getProperty("newCommandTimeout")))
+                    .setDeviceName(prop.getProperty("deviceName"))
+                    .setPlatformName(prop.getProperty("platformName"))
+                    .setAppPackage(prop.getProperty("appPackage"))
+                    .setAppActivity(prop.getProperty("appActivity"))
+                    .setPlatformVersion(prop.getProperty("platformVersion"))
+                    .setAutomationName(prop.getProperty("automationName"))
+                    .setSystemPort(8201)
+                    .setUiautomator2ServerLaunchTimeout(Duration.parse("80000"))
+                    .setAdbExecTimeout(Duration.parse("80000"))
+                    .setApp(System.getProperty("user.dir") + "/" + prop.getProperty("app"))
+                    .setEnforceAppInstall(false)
+                    .setSkipDeviceInitialization(true)
+                    .setNoReset(true)
+                    .setSkipServerInstallation(true)
+                    .setAutoGrantPermissions(true);
+
+            driver = new AndroidDriver(new URL(prop.getProperty("endpoint")), options);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -105,31 +128,53 @@ public class BaseTestConfig extends RetryAnalyzer {
 
 
     }
+
     /**
-     *To Launch PlayStore
+     * To Launch PlayStore
      */
     public void launchPlayStore() {
-            try {
-                System.out.println("EndPoint used is " + prop.getProperty("endpoint"));
-                DesiredCapabilities capabilities = new DesiredCapabilities();
-                capabilities.setCapability("newCommandTimeout", prop.getProperty("newCommandTimeout"));
-                capabilities.setCapability("platformName", prop.getProperty("platformName"));
-                capabilities.setCapability("platformVersion", prop.getProperty("platformVersion"));
-                capabilities.setCapability("appPackage", prop.getProperty("playstorepkg"));
-                capabilities.setCapability("appActivity", prop.getProperty("playstoreActivity"));
-                capabilities.setCapability("deviceName", prop.getProperty("deviceName"));
-                capabilities.setCapability("noSign", prop.getProperty("noSign"));
-                capabilities.setCapability("automationName", prop.getProperty("automationName"));
-                capabilities.setCapability("systemPort", prop.getProperty("systemPort"));
-                capabilities.setCapability("uiautomator2ServerLaunchTimeout", "80000");
-                capabilities.setCapability("adbExecTimeout", "80000");
-                capabilities.setCapability("skipDeviceInitialization", true);
-                capabilities.setCapability("skipServerInstallation",true);
-                capabilities.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true);
-                driver = new AndroidDriver<MobileElement>(new URL(prop.getProperty("endpoint")), capabilities);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        try {
+            System.out.println("EndPoint used is " + prop.getProperty("endpoint"));
+            /*DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability("newCommandTimeout", prop.getProperty("newCommandTimeout"));
+            capabilities.setCapability("platformName", prop.getProperty("platformName"));
+            capabilities.setCapability("platformVersion", prop.getProperty("platformVersion"));
+            capabilities.setCapability("appPackage", prop.getProperty("playstorepkg"));
+            capabilities.setCapability("appActivity", prop.getProperty("playstoreActivity"));
+            capabilities.setCapability("deviceName", prop.getProperty("deviceName"));
+            capabilities.setCapability("noSign", prop.getProperty("noSign"));
+            capabilities.setCapability("automationName", prop.getProperty("automationName"));
+            capabilities.setCapability("systemPort", prop.getProperty("systemPort"));
+            capabilities.setCapability("uiautomator2ServerLaunchTimeout", "80000");
+            capabilities.setCapability("adbExecTimeout", "80000");
+            capabilities.setCapability("skipDeviceInitialization", true);
+            capabilities.setCapability("skipServerInstallation", true);
+            capabilities.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true);
+            driver = new AndroidDriver(new URL(prop.getProperty("endpoint")), capabilities);*/
+
+
+            UiAutomator2Options options = new UiAutomator2Options();
+            options.setNewCommandTimeout(Duration.parse(prop.getProperty("newCommandTimeout")))
+                    .setPlatformName(prop.getProperty("platformName"))
+                    .setPlatformVersion(prop.getProperty("platformVersion"))
+                    .setAppPackage(prop.getProperty("playstorepkg"))
+                    .setAppActivity(prop.getProperty("playstoreActivity"))
+                    .setDeviceName(prop.getProperty("deviceName"))
+                    .setNoSign(true)
+                    .setAutomationName(prop.getProperty("automationName"))
+                    .setSystemPort(8201)
+                    .setUiautomator2ServerLaunchTimeout(Duration.parse("80000"))
+                    .setAdbExecTimeout(Duration.parse("80000"))
+                    .setSkipDeviceInitialization(true)
+                    .setSkipServerInstallation(true)
+                    .setAutoGrantPermissions(true);
+
+            driver = new AndroidDriver(new URL(prop.getProperty("endpoint")), options);
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         ContextManager.setDriver(driver);
     }
 
@@ -137,9 +182,9 @@ public class BaseTestConfig extends RetryAnalyzer {
      * Quiting the Driver
      */
     public void closeApplication() {
-            if (ContextManager.getDriver() != null) {
-                ContextManager.getDriver().quit();
-            }
+        if (ContextManager.getDriver() != null) {
+            ContextManager.getDriver().quit();
+        }
 
     }
 
@@ -186,7 +231,7 @@ public class BaseTestConfig extends RetryAnalyzer {
 
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -195,11 +240,13 @@ public class BaseTestConfig extends RetryAnalyzer {
 
     /**
      * Capture screen shot
+     *
      * @return
      */
     public String getBase64() {
-        return ((TakesScreenshot)driver).getScreenshotAs(OutputType.BASE64);
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
     }
+
     /**
      * @Description : Un install app using adb commands
      */
@@ -216,7 +263,7 @@ public class BaseTestConfig extends RetryAnalyzer {
                 Process p = pb.start();
                 p.waitFor();
                 Thread.sleep(5000);
-            } else if(osName.contains("Mac")) {
+            } else if (osName.contains("Mac")) {
                 allCommand = concat(OS_MAC_RUNTIME, command);
                 ProcessBuilder pb = new ProcessBuilder(allCommand);
                 pb.redirectErrorStream(true);
@@ -226,7 +273,7 @@ public class BaseTestConfig extends RetryAnalyzer {
             }
 
         } catch (NullPointerException | InterruptedException | IOException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -240,7 +287,7 @@ public class BaseTestConfig extends RetryAnalyzer {
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
                 p.waitFor();
-            } else if(osName.contains("Mac")) {
+            } else if (osName.contains("Mac")) {
                 allCommand = concat(OS_MAC_RUNTIME, command);
                 ProcessBuilder pb = new ProcessBuilder(allCommand);
                 pb.redirectErrorStream(true);
@@ -256,7 +303,7 @@ public class BaseTestConfig extends RetryAnalyzer {
     public void writeAdbLogs() {
         File logs = new File(System.getProperty("user.dir") + "/logs/" + "AdbLogs.txt");
         try {
-            String command = "adb logcat >"+logs;
+            String command = "adb logcat >" + logs;
             String[] allCommand;
             String osName = System.getProperty("os.name");
             if (osName.contains("Win")) {
@@ -265,14 +312,14 @@ public class BaseTestConfig extends RetryAnalyzer {
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
                 p.waitFor();
-            } else if(osName.contains("Mac")) {
+            } else if (osName.contains("Mac")) {
                 allCommand = concat(OS_MAC_RUNTIME, command);
                 ProcessBuilder pb = new ProcessBuilder(allCommand);
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
                 p.waitFor();
             }
-            Robot robot= new Robot();
+            Robot robot = new Robot();
             robot.keyPress(KeyEvent.VK_CONTROL);
             robot.keyPress(KeyEvent.VK_C);
             robot.keyRelease(KeyEvent.VK_C);

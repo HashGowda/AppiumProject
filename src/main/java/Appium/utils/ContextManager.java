@@ -4,7 +4,6 @@ package Appium.utils;
 import io.appium.java_client.AppiumDriver;
 
 /**
- *
  * @author: Prashanth
  * Purpose:	To set the configuration for type of drivers
  */
