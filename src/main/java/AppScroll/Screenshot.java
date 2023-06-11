@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
-public class ZoomIn_Out {
+public class Screenshot {
 
     public AppiumDriver driver;
 
@@ -39,7 +39,7 @@ public class ZoomIn_Out {
     @Test
     public void zoomIn(){
 
-        driver.findElement(AppiumBy.)
+
 
     }
 }
