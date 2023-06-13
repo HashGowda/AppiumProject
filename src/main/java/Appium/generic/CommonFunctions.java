@@ -6,6 +6,7 @@ import Appium.utils.ContextManager;
 import com.google.common.collect.ImmutableList;
 import io.appium.java_client.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
@@ -15,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -304,7 +306,13 @@ public class CommonFunctions implements Constants {
     public void scrollTo(String Text) {
         if (ContextManager.getDriver() instanceof AndroidDriver) {
             scrollIntoView(Text);
-        }
+        } /*else
+            if (ContextManager.getDriver() instanceof IOSDriver){
+                final HashMap<String, String> scrollObject = new HashMap<>();
+                scrollObject.put("predicateString", "value == '"+Text+"'");
+                scrollObject.put("toVisible", "true");
+                ((IOSDriver) ContextManager.getDriver().executeScript("mobile:scroll",scrollObject.put()));
+            }*/
     }
 
     public enum ScrollDirection {

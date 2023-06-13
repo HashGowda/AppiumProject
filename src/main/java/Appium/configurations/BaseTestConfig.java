@@ -11,6 +11,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import org.openqa.selenium.*;
 
 
@@ -52,9 +53,31 @@ public class BaseTestConfig extends RetryAnalyzer {
      */
     public void startAppiumServer() {
         try {
-            service = AppiumDriverLocalService.buildDefaultService();
+            /*service = AppiumDriverLocalService.buildDefaultService();
             writeAppiumServerLogsIntoFile();
+            service.start();*/
+
+            AppiumServiceBuilder builder = new AppiumServiceBuilder();
+            builder
+                    .withAppiumJS(new File("C:\\Users\\haris\\AppData\\Roaming\\npm\\node_modules\\appium\\lib\\main.js"))
+                    .usingDriverExecutable(new File("C:\\Program Files\\nodejs\\node"))
+                    .usingPort(4723)
+                    .withArgument(GeneralServerFlag.LOCAL_TIMEZONE)
+                    .withLogFile(new File(System.getProperty("user.dir") + "/logs" + "AppiumServerLogs.text"))
+                    .withIPAddress("127.0.0.1")
+                    .build();
+            service = AppiumDriverLocalService.buildService(builder);
             service.start();
+
+           /* service = new AppiumServiceBuilder()
+                    .withIPAddress("127.0.0.1")
+                    .usingPort(4723)
+                    //.withArgument(GeneralServerFlag.BASEPATH, "/wd/hub") //use when java-client less than 8
+                    .withArgument(GeneralServerFlag.LOCAL_TIMEZONE)
+                    .withLogFile(new File(System.getProperty("user.dir") + "/logs" + "AppiumServerLogs.text"));
+
+
+            service.start();*/
 
         } catch (Exception e) {
             e.printStackTrace();
