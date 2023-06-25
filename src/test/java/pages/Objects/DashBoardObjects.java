@@ -28,11 +28,8 @@ public class DashBoardObjects {
 
     @AndroidFindAll({
             @AndroidBy(xpath = "((//*[contains(@text,'off')])[1]//preceding::android.widget.ImageView)[position()=last()]"),
-            @AndroidBy(xpath= "((//*[contains(@text,'OFF')])[1]//preceding::android.widget.ImageView)[position()=last()]")
+            @AndroidBy(xpath = "((//*[contains(@text,'OFF')])[1]//preceding::android.widget.ImageView)[position()=last()]")
     })
     public WebElement prodImage;
-
-
-
 
 }

@@ -37,17 +37,17 @@ public class DashBoardActions implements Constants {
         commonFunction.waitAndClick(dashBoardObjects.india, "India");
         commonFunction.waitAndClick(dashBoardObjects.news, "News");
         commonFunction.waitInSec(2);
-//        commonFunction.swipeRight();
-//        commonFunction.swipeLeft();
-//        commonFunction.swipeDown();
-//        commonFunction.swipeUp();
-//        commonFunction.swipeRight();
+        commonFunction.swipeRight();
+        commonFunction.swipeLeft();
+        commonFunction.swipeDown();
+        commonFunction.swipeUp();
+        commonFunction.swipeRight();
 
-        commonFunction.scroll(CommonFunctions.ScrollDirection.RIGHT, SCROLL_RATIO);
+        /*commonFunction.scroll(CommonFunctions.ScrollDirection.RIGHT, SCROLL_RATIO);
         commonFunction.scroll(CommonFunctions.ScrollDirection.LEFT, SCROLL_RATIO);
         commonFunction.scroll(CommonFunctions.ScrollDirection.DOWN, SCROLL_RATIO);
         commonFunction.scroll(CommonFunctions.ScrollDirection.UP, SCROLL_RATIO);
-        commonFunction.scroll(CommonFunctions.ScrollDirection.RIGHT, SCROLL_RATIO);
+        commonFunction.scroll(CommonFunctions.ScrollDirection.RIGHT, SCROLL_RATIO);*/
 
         Set<String> text_Set = new TreeSet<>();
         commonFunction.waitInSec(2);

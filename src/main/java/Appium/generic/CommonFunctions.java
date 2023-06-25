@@ -16,14 +16,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 
-
 public class CommonFunctions implements Constants {
 
-    public AppiumDriver driver;
+    public static AppiumDriver driver;
+    public static PointerInput finger;
+    public static Sequence sequence;
     WebDriverWait wait = null;
     public static Dimension windowSize;
     public static Duration SCROLL_DUR = Duration.ofMillis(1000);
@@ -143,6 +145,7 @@ public class CommonFunctions implements Constants {
 //        }
 //    }
 
+
     /**
      * This function will wait for the element to be visible
      */
@@ -243,26 +246,105 @@ public class CommonFunctions implements Constants {
 //
 //        }
 //    }
-//
-//
-//    public void swipeUp() {
-//        swipe(driver, DIRECTION.UP);
-//    }
-//
-//    public void swipeDown() {
-//        swipe(driver, DIRECTION.DOWN);
-//
-//    }
-//
-//    public void swipeRight() {
-//        swipe(driver, DIRECTION.RIGHT);
-//
-//    }
-//
-//    public void swipeLeft() {
-//        swipe(driver, DIRECTION.LEFT);
-//
-//    }
+
+
+    public enum DIRECTION {
+        DOWN, UP, LEFT, RIGHT;
+    }
+
+    public static void swipe(AppiumDriver driver, DIRECTION direction) {
+        Dimension size = driver.manage().window().getSize();
+
+        int startX = 0;
+        int endX = 0;
+        int startY = 0;
+        int endY = 0;
+
+        switch (direction) {
+            case RIGHT:
+                startY = (int) (size.height / 2);
+                startX = (int) (size.width * 0.90);
+                endX = (int) (size.width * 0.05);
+
+                finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+                sequence = new Sequence(finger, 1)
+                        .addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
+                        .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                        .addAction(new Pause(finger, Duration.ofSeconds(2)))
+                        .addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), endX, startY))
+                        .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+                driver.perform(Collections.singletonList(sequence));
+
+                break;
+
+            case LEFT:
+                startY = (int) (size.height / 2);
+                startX = (int) (size.width * 0.05);
+                endX = (int) (size.width * 0.90);
+                sequence = new Sequence(finger, 1)
+                        .addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
+                        .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                        .addAction(new Pause(finger, Duration.ofSeconds(2)))
+                        .addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), endX, startY))
+                        .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+                driver.perform(Collections.singletonList(sequence));
+
+                break;
+
+            case UP:
+                endY = (int) (size.height * 0.70);
+                startY = (int) (size.height * 0.30);
+                startX = (size.width / 2);
+                sequence = new Sequence(finger, 1)
+                        .addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
+                        .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                        .addAction(new Pause(finger, Duration.ofSeconds(2)))
+                        .addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), startX, endY))
+                        .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+                driver.perform(Collections.singletonList(sequence));
+                break;
+
+
+            case DOWN:
+                startY = (int) (size.height * 0.70);
+                endY = (int) (size.height * 0.30);
+                startX = (size.width / 2);
+                sequence = new Sequence(finger, 1)
+                        .addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY))
+                        .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                        .addAction(new Pause(finger, Duration.ofSeconds(2)))
+                        .addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), startX, endY))
+                        .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+                driver.perform(Collections.singletonList(sequence));
+
+                break;
+
+        }
+    }
+
+
+    public void swipeUp() {
+        swipe(driver, DIRECTION.UP);
+    }
+
+    public void swipeDown() {
+        swipe(driver, DIRECTION.DOWN);
+
+    }
+
+    public void swipeRight() {
+        swipe(driver, DIRECTION.RIGHT);
+
+    }
+
+    public void swipeLeft() {
+        swipe(driver, DIRECTION.LEFT);
+
+    }
 
    /* public static void scrollNClick(By listItems, String Text) {
         boolean flag = false;
@@ -362,7 +444,7 @@ public class CommonFunctions implements Constants {
         }
         swipe.addAction(input.createPointerMove(dur, PointerInput.Origin.viewport(), end.x, end.y));
         swipe.addAction(input.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-        ((AppiumDriver) ContextManager.getDriver()).perform(ImmutableList.of(swipe));
+        driver.perform(ImmutableList.of(swipe));
     }
 
 
@@ -374,16 +456,16 @@ public class CommonFunctions implements Constants {
         swipe.addAction(input.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
         swipe.addAction(input.createPointerMove(Duration.ofSeconds(1), PointerInput.Origin.viewport(), location.x, location.y));
         swipe.addAction(input.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-        ((AppiumDriver) ContextManager.getDriver()).perform(ImmutableList.of(swipe));
+        driver.perform(ImmutableList.of(swipe));
     }
 
 //    public void click(By byEl) {
 //        new WebDriverWait((AppiumDriver) ContextManager.getDriver(), Duration.ofSeconds(20)).until(ExpectedConditions.presenceOfElementLocated(byEl)).click();
 //    }
 //
-//    public void sendkeys(By byEl, String text) {
+//    public void sendKeys(By byEl, String text) {
 //        waitForEl(byEl);
-//        (AppiumDriver) ContextManager.getDriver().findElement(byEl).sendkeys(text);
+//        (AppiumDriver) ContextManager.getDriver().findElement(byEl).sendKeys(text);
 //    }
 
 //    public void waitForEl(By byEl) {

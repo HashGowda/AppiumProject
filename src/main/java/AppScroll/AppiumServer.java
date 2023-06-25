@@ -5,7 +5,6 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
 import java.io.File;
-import java.net.ServerSocket;
 
 public class AppiumServer {
 
